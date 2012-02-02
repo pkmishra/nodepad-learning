@@ -2,16 +2,10 @@ module.exports = function(app){
 var Document = app.Document;	
 // Document list
 
-app.get('/documents', function(req, res) {
-  Document.find(function(err, documents) {
-  	documents = documents.map(function(d) {
-      return { title: d.title, id: d._id };
-    });
-    res.render('documents/index.jade', {
-      locals: { documents: documents }
-    });
-  });
+app.get('/', function(req, res) {
+    res.redirect('/documents');
 });
+
 app.get('/documents.:format?', function(req, res) {
   Document.find(function(err, documents) {
     switch (req.params.format) {
