@@ -11,7 +11,6 @@ var app = require('../app'),
     document = app.Document;
 browser = new Browser();
 
-
 describe('nodepad application', function(){
 	describe('browser testing ', function(){	
  	   it('Visit to default page should redirect to login page', function(done){
