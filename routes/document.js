@@ -1,12 +1,9 @@
-module.exports = function(app){
-var Document = app.Document;	
+module.exports = function(app, loadUser){
+var Document = app.Document;
 // Document list
 
-app.get('/', function(req, res) {
-    res.redirect('/documents');
-});
 
-app.get('/documents.:format?', function(req, res) {
+app.get('/documents.:format?',loadUser, function(req, res) {
   Document.find(function(err, documents) {
     switch (req.params.format) {
       case 'json':
@@ -17,28 +14,28 @@ app.get('/documents.:format?', function(req, res) {
 
       default:
         res.render('documents/index.jade', {
-          locals: { documents: documents }
+          locals: { documents: documents, currentUser: req.currentUser }
         });
     }
   });
 });
 
-app.get('/documents/:id.:format?/edit', function(req, res) {
+app.get('/documents/:id.:format?/edit',loadUser, function(req, res) {
   Document.findById(req.params.id, function(err, d) {
     res.render('documents/edit.jade', {
-      locals: { d: d }
+      locals: { d: d, currentUser: req.currentUser }
     });
   });
 });
 
-app.get('/documents/new', function(req, res) {
+app.get('/documents/new',loadUser, function(req, res) {
   res.render('documents/new.jade', {
-    locals: { d: new Document() }
+    locals: { d: new Document() , currentUser: req.currentUser}
   });
 });
 
 // Create document 
-app.post('/documents.:format?', function(req, res) {
+app.post('/documents.:format?',loadUser, function(req, res) {
   var d = new Document(req.body.d);
   d.save(function() {
     switch (req.params.format) {
@@ -53,7 +50,7 @@ app.post('/documents.:format?', function(req, res) {
 });
 
 // Read document
-app.get('/documents/:id.:format?', function(req, res) {
+app.get('/documents/:id.:format?',loadUser, function(req, res) {
   Document.findById(req.params.id, function(err, d) {
     switch (req.params.format) {
       case 'json':
@@ -62,14 +59,14 @@ app.get('/documents/:id.:format?', function(req, res) {
 
       default:
         res.render('documents/show.jade', {
-          locals: { d: d }
+          locals: { d: d, currentUser: req.currentUser }
         });
     }
   });
 });
 
 // Update document
-app.put('/documents/:id.:format?', function(req, res) {
+app.put('/documents/:id.:format?',loadUser, function(req, res) {
   Document.findById(req.body.d.id, function(err, d) {
     d.title = req.body.d.title;
     d.data = req.body.d.data;
@@ -87,7 +84,7 @@ app.put('/documents/:id.:format?', function(req, res) {
 });
 
 // Delete document
-app.del('/documents/:id.:format?', function(req, res) {
+app.del('/documents/:id.:format?',loadUser, function(req, res) {
   Document.findById(req.params.id, function(err, d) {
     d.remove(function() {
       switch (req.params.format) {
