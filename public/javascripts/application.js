@@ -8,13 +8,13 @@
       return null;
     }
   };
-//Edit request
+
   $.put = function(url, data, success) {
     data._method = 'PUT';
     $.post(url, data, success, 'json');
   };
- //delete request
-   $('#delete-document').click(function(e) {
+
+  $('#delete-document').click(function(e) {
     e.preventDefault();
     if (confirm('Are you sure you want to delete that document?')) {
       var element = $(this),
@@ -32,11 +32,12 @@
           'value': 'delete'
         })
         .end()
+        .appendTo('body')
         .submit();
     }
   });
 
- $('#logout').click(function(e) {
+  $('#logout').click(function(e) {
     e.preventDefault();
     if (confirm('Are you sure you want to log out?')) {
       var element = $(this),
@@ -54,10 +55,11 @@
           'value': 'delete'
         })
         .end()
+        .appendTo('body')
         .submit();
     }
   });
-  
+
   // Correct widths and heights based on window size
   function resize() {
     var height = $(window).height() - $('#header').height() - 1,
@@ -81,15 +83,15 @@
     divider.css({ height: height + 'px' });
 
     ed.css({
-      width: content.width() - 5 + 'px',
-      height: content.height() - 5 + 'px'
+      width: content.width() + 'px',
+      height: content.height() - 22 - $('input.title').height() + 'px'
     }).focus();
 
     $('#controls').css({
       width: content.width() + 'px'
     });
   }
-//Document title click function
+
   $('#document-list li a').live('click', function(e) {
     var li = $(this);
 
@@ -97,25 +99,34 @@
       $('#document-list .selected').removeClass('selected');
       li.addClass('selected');
       $('#editor').val(data.data);
+      $('.title').val(data.title);
       $('#editor').focus();
     });
 
     e.preventDefault();
   });
-//by default select first note
+
   if ($('#document-list .selected').length == 0) {
     $('#document-list li a').first().click();
   }
-//save 
+
   $('#save-button').click(function() {
     var id = $('#document-list .selected').itemID(),
-        params = { d: { title:$('#document-list .selected').text(),  data: $('#editor').val(), id: id } };
+        params = { d: { data: $('#editor').val(), id: id, title: $('input.title').val() } };
     $.put('/documents/' + id + '.json', params, function(data) {
       // Saved, will return JSON
+      $('#document-title-' + id).html(data.title);
     });
   });
-  
-  
+
+  $('#create-document').click(function(e) {
+    $.post('/documents.json', { d: { data: '', title: 'Untitled Document' } }, function(new_doc) {
+      $('#document-list').append('<li><a id="document-title-' + new_doc._id + '" href="/documents/' + new_doc._id + '">' + new_doc.title + '</a></li>');
+      $('#document-title-' + new_doc._id).click();
+    });
+    e.preventDefault();
+  });
+
   $('#html-button').click(function() {
     var container = $('#html-container');
     if (container.is(':visible')) {
@@ -132,7 +143,7 @@
     }
   });
 
-function hideFlashMessages() {
+  function hideFlashMessages() {
     $(this).fadeOut();
   }
 
@@ -140,6 +151,7 @@ function hideFlashMessages() {
     $('.flash').each(hideFlashMessages);
   }, 5000);
   $('.flash').click(hideFlashMessages);
+
   $(window).resize(resize);
   $(window).focus(resize);
   resize();
