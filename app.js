@@ -11,6 +11,7 @@ var express = require('express'),
     mongoStore = require('connect-mongodb'),
     models = require('./models'),
     path = require('path'),
+    stylus = require('stylus'),
     //markdown = require('markdown').markdown,
     Document,
     db,
@@ -28,7 +29,8 @@ app.configure(function() {
   app.use(express.session({store: mongoStore(app.set('db-uri')), secret : 'nodepad-learning-secret#123'}));
   app.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }))
   app.use(express.methodOverride());
-  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+  app.use(stylus.middleware({ src: __dirname + '/public' }));
+  //app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
   app.use(express.static(__dirname + '/public'));
   app.use(app.router);
 });
