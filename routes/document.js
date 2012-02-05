@@ -8,7 +8,7 @@ app.get('/documents.:format?',loadUser, function(req, res) {
     switch (req.params.format) {
       case 'json':
         res.send(documents.map(function(d) {
-          return d.__doc;
+          return d.toObject();
         }));
       break;
 
@@ -40,7 +40,7 @@ app.post('/documents.:format?',loadUser, function(req, res) {
   d.save(function() {
     switch (req.params.format) {
       case 'json':
-        res.send(d.__doc);
+        res.send(d.toObject());
        break;
 
        default:
@@ -54,7 +54,7 @@ app.get('/documents/:id.:format?',loadUser, function(req, res) {
   Document.findById(req.params.id, function(err, d) {
     switch (req.params.format) {
       case 'json':
-        res.send(d.__doc);
+        res.send(d.toObject());
       break;
 
       default:
@@ -73,7 +73,7 @@ app.put('/documents/:id.:format?',loadUser, function(req, res) {
     d.save(function() {
       switch (req.params.format) {
         case 'json':
-          res.send(d.__doc);
+          res.send(d.toObject());
          break;
 
          default:
