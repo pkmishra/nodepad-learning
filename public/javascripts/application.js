@@ -36,6 +36,28 @@
     }
   });
 
+ $('#logout').click(function(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to log out?')) {
+      var element = $(this),
+          form = $('<form></form>');
+      form
+        .attr({
+          method: 'POST',
+          action: '/sessions'
+        })
+        .hide()
+        .append('<input type="hidden" />')
+        .find('input')
+        .attr({
+          'name': '_method',
+          'value': 'delete'
+        })
+        .end()
+        .submit();
+    }
+  });
+  
   // Correct widths and heights based on window size
   function resize() {
     var height = $(window).height() - $('#header').height() - 1,

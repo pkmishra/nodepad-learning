@@ -3,7 +3,7 @@ html
   head
     title= 'Nodepad'
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/aristo/Aristo.css')
+    link(rel='stylesheet', href='/stylesheets/aristo/jquery-ui-1.8.5.custom.css')
     script(type='text/javascript', src='/javascripts/json.js')
     script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
     script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js')
@@ -13,10 +13,10 @@ html
         ul
           li
             h1
-              a(href='/') Nodepad
+              a(href='/') #{nameAndVersion(appName, version)}
           - if (typeof currentUser !== 'undefined')
             li.right
-              a.destroy(href='/sessions') Log Out
-       !{flashMessages}
-      != body        
-      script(type='text/javascript', src='/javascripts/application.js')
+              a#logout(href='/sessions') Log Out
+      !{flashMessages}
+      != body
+    script(type='text/javascript', src='/javascripts/application.js')

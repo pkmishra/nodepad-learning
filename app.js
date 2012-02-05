@@ -12,14 +12,59 @@ var express = require('express'),
     models = require('./models'),
     path = require('path'),
     stylus = require('stylus'),
-    //markdown = require('markdown').markdown,
+    mailer = require('mailer'),
+    jade = require('jade'),
     Document,
     db,
     User,
+    emails,
     LoginToken;
 var app = module.exports = express.createServer();
 app.helpers(require('./helpers.js').helpers);
 app.dynamicHelpers(require('./helpers.js').dynamicHelpers);
+
+function renderJadeFile(template, options) {
+  var fn = jade.compile(template, options);
+  return fn(options.locals);
+}
+
+emails = {
+  send: function(template, mailOptions, templateOptions) {
+    mailOptions.to = mailOptions.to;
+    renderJadeFile(path.join(__dirname, 'views', 'mailer', template), templateOptions, function(err, text) {
+      // Add the rendered Jade template to the mailOptions
+      mailOptions.body = text;
+
+      // Merge the app's mail options
+      var keys = Object.keys(app.set('mailOptions')),
+          k;
+      for (var i = 0, len = keys.length; i < len; i++) {
+        k = keys[i];
+        if (!mailOptions.hasOwnProperty(k))
+          mailOptions[k] = app.set('mailOptions')[k]
+      }
+
+      console.log('[SENDING MAIL]', util.inspect(mailOptions));
+
+      // Only send mails in production
+      if (app.settings.env == 'production') {
+        mailer.send(mailOptions,
+          function(err, result) {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
+      }
+    });
+  },
+
+  sendWelcome: function(user) {
+    this.send('welcome.jade', { to: user.email, subject: 'Welcome to Nodepad' }, { locals: { user: user } });
+  }
+};
+
+
 // Configuration
 
 app.configure(function() {
@@ -33,6 +78,11 @@ app.configure(function() {
   //app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
   app.use(express.static(__dirname + '/public'));
   app.use(app.router);
+  app.set('mailOptions', {
+    host:    'localhost',
+    port:    '25',
+    from:    'nodepad@example.com',
+  });
 });
 
 app.configure('development', function(){
@@ -156,7 +206,7 @@ function loadUser(req, res, next) {
 app.get('/', loadUser, function(req, res) {
     res.redirect('/documents');
 });
-
+module.exports = {emails:emails};
 
 require('./routes/document')(app, loadUser);
 require('./routes/user')(app, loadUser);

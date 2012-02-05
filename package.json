@@ -9,6 +9,7 @@
        "connect-mongodb": ">0.0.1",
        "crypto": ">0.0.1",
        "markdown": ">0.2.0",
-       "stylus": ">0.0.1"
+       "stylus": ">0.0.1",
+       "mailer": ">0.0.1"
   }
 }

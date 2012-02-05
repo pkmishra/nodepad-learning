@@ -1,6 +1,8 @@
 module.exports = function(app, loadUser){
-var User = app.User;	
+var User = app.User;
+var emails = require('../app.js').emails;	
 // Document list
+// Users
 // Users
 app.get('/users/new', function(req, res) {
   res.render('users/new.jade', {
@@ -11,26 +13,28 @@ app.get('/users/new', function(req, res) {
 app.post('/users.:format?', function(req, res) {
   var user = new User(req.body.user);
 
-  function userSaved() {
+  function userSaveFailed() {
+    req.flash('error', 'Account creation failed');
+    res.render('users/new.jade', {
+      locals: { user: user }
+    });
+  }
+
+  user.save(function(err) {
+    if (err) return userSaveFailed();
+
     req.flash('info', 'Your account has been created');
+    emails.sendWelcome(user);
+
     switch (req.params.format) {
       case 'json':
-        res.send(user.__doc);
+        res.send(user.toObject());
       break;
 
       default:
         req.session.user_id = user.id;
         res.redirect('/documents');
     }
-  }
-
-  function userSaveFailed() {
-     req.flash('error', 'Account creation failed');
-    res.render('users/new.jade', {
-      locals: { user: user }
-    });
-  }
-
-  user.save(userSaved, userSaveFailed);
+  });
 });
 }
