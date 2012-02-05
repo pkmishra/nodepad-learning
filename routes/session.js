@@ -13,7 +13,7 @@ app.post('/sessions', function(req, res) {
       req.session.user_id = user.id;
       res.redirect('/documents');
     } else {
-      // TODO: Show error
+       req.flash('error', 'Incorrect credentials');
       res.redirect('/sessions/new');
     }
   }); 
@@ -21,6 +21,7 @@ app.post('/sessions', function(req, res) {
 
 app.del('/sessions', loadUser, function(req, res) {
   if (req.session) {
+  	req.flash('info', 'You are now logged out');
     req.session.destroy(function() {});
   }
   res.redirect('/sessions/new');

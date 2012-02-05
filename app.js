@@ -15,6 +15,8 @@ var express = require('express'),
     User,
     LoginToken;
 var app = module.exports = express.createServer();
+app.helpers(require('./helpers.js').helpers);
+app.dynamicHelpers(require('./helpers.js').dynamicHelpers);
 // Configuration
 
 app.configure(function() {

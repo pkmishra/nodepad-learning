@@ -44,6 +44,7 @@ app.post('/documents.:format?',loadUser, function(req, res) {
        break;
 
        default:
+        req.flash('info', 'Document created');
         res.redirect('/documents');
     }
   });
@@ -77,6 +78,7 @@ app.put('/documents/:id.:format?',loadUser, function(req, res) {
          break;
 
          default:
+         req.flash('info', 'Document updated');
           res.redirect('/documents');
       }
     });
@@ -93,6 +95,7 @@ app.del('/documents/:id.:format?',loadUser, function(req, res) {
          break;
 
          default:
+         req.flash('info', 'Document deleted');
           res.redirect('/documents');
       } 
     });
