@@ -1,5 +1,7 @@
 module.exports = function(app, loadUser){
-var User = app.User;	
+var User = app.User;
+var LoginToken = app.LoginToken;
+//var LoginToken = app.LoginToken;	
 // Sessions
 app.get('/sessions/new', function(req, res) {
   res.render('sessions/new.jade', {
@@ -11,9 +13,19 @@ app.post('/sessions', function(req, res) {
   User.findOne({ email: req.body.user.email }, function(err, user) {
     if (user && user.authenticate(req.body.user.password)) {
       req.session.user_id = user.id;
-      res.redirect('/documents');
+
+      // Remember me
+      if (req.body.remember_me) {
+        var loginToken = new LoginToken({ email: user.email });
+        loginToken.save(function() {
+          res.cookie('logintoken', loginToken.cookieValue, { expires: new Date(Date.now() + 2 * 604800000), path: '/' });
+          res.redirect('/documents');
+        });
+      } else {
+        res.redirect('/documents');
+      }
     } else {
-       req.flash('error', 'Incorrect credentials');
+      req.flash('error', 'Incorrect credentials');
       res.redirect('/sessions/new');
     }
   }); 
@@ -21,6 +33,8 @@ app.post('/sessions', function(req, res) {
 
 app.del('/sessions', loadUser, function(req, res) {
   if (req.session) {
+  	LoginToken.remove({ email: req.currentUser.email }, function() {});
+    res.clearCookie('logintoken');
   	req.flash('info', 'You are now logged out');
     req.session.destroy(function() {});
   }
