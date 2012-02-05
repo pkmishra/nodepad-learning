@@ -7,6 +7,7 @@
        "jade": ">= 0.0.1",
        "zombie": ">0.0.1",
        "connect-mongodb": ">0.0.1",
-       "crypto": ">0.0.1"
+       "crypto": ">0.0.1",
+       "markdown": ">0.2.0"
   }
 }

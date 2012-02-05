@@ -1,5 +1,6 @@
 module.exports = function(app, loadUser){
 var Document = app.Document;
+var markdown = require('markdown').markdown;
 // Document list
 
 
@@ -57,7 +58,11 @@ app.get('/documents/:id.:format?',loadUser, function(req, res) {
       case 'json':
         res.send(d.toObject());
       break;
-
+      
+	  case 'html':
+        res.send(markdown.toHTML(d.data));
+      break;
+      
       default:
         res.render('documents/show.jade', {
           locals: { d: d, currentUser: req.currentUser }
