@@ -4,7 +4,7 @@
 /**
  * Module dependencies.
  */
-/*
+
 process.env.NODE_ENV = 'test';
 var should = require('should');   
 var app = require('../app');
@@ -48,5 +48,3 @@ describe('nodepad application api', function(){
 		});
 	});
 });
-
-*/

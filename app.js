@@ -7,6 +7,7 @@ var express = require('express'),
     routes = require('./routes'),
     jade = require('jade'),
     mongoose = require('mongoose'),
+    util = require('util'),
     mongoStore = require('connect-mongodb'),
     models = require('./models'),
     Document,
@@ -58,6 +59,44 @@ models.defineModels(mongoose, function() {
   app.User = User = mongoose.model('User');
    db = mongoose.connect(app.set('db-uri'));
 })
+
+// Error handling
+function NotFound(msg) {
+  this.name = 'NotFound';
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}
+
+util.inherits(NotFound, Error);
+
+app.get('/404', function(req, res) {
+  throw new NotFound;
+});
+
+app.get('/500', function(req, res) {
+  throw new Error('An expected error');
+});
+
+app.get('/bad', function(req, res) {
+  unknownMethod();
+});
+
+app.error(function(err, req, res, next) {
+  if (err instanceof NotFound) {
+    res.render('404.jade', { status: 404 });
+  } else {
+    next(err);
+  }
+});
+
+app.error(function(err, req, res) {
+  res.render('500.jade', {
+    status: 500,
+    locals: {
+      error: err
+    } 
+  });
+});
 
 function loadUser(req, res, next) {
   if (req.session.user_id) {
