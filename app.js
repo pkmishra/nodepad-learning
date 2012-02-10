@@ -183,7 +183,6 @@ function authenticateFromLoginToken(req, res, next) {
   }));
 }
 
-
 function loadUser(req, res, next) {
   if (req.session.user_id) {
     User.findById(req.session.user_id, function(err, user) {

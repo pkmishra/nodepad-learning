@@ -1,10 +1,8 @@
 #left.outline-view
   #DocumentTitles
     ul#document-list
-      - for (var d in documents)
-        li
-          a(id='document-title-' + documents[d].id, href='/documents/' + documents[d].id)
-            =documents[d].title
+      li#document-row-template(style='display: none')
+        a(id='document_{{ id }}') {{ title }}
 
   ul.toolbar
     li
@@ -19,9 +17,9 @@
 .content
   #html-container(style='display: none')
   #editor-container
-  div.title
-    input.title(name='d[title]')= d.title
-  textarea#editor(name='d[data]')
+    div.title
+      input.title(name='d[title]')= d.title
+    textarea#editor(name='d[data]')
 
 ul#controls.toolbar
   li

@@ -3,10 +3,12 @@ html
   head
     title= 'Nodepad'
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/aristo/jquery-ui-1.8.5.custom.css')
+    link(rel='stylesheet', href='/stylesheets/aristo/aristo.css')
     script(type='text/javascript', src='/javascripts/json.js')
-    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
-    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js')
+    script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+    script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
+    script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js')
+    script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.0/backbone-min.js')
   body
     #container
       #header
@@ -17,6 +19,17 @@ html
           - if (typeof currentUser !== 'undefined')
             li.right
               a#logout(href='/sessions') Log Out
+            li.right
+              form.search(action='/search')
+                input(name='s', value='Search')
       !{flashMessages}
       != body
-    script(type='text/javascript', src='/javascripts/application.js')
+    script(type='text/javascript', src='/javascripts/flash.js')
+    - if (typeof documents !== 'undefined')
+      script(type='text/javascript', src='/javascripts/documents.js')
+      script(type='text/javascript', src='/javascripts/resize.js')
+      script(type='text/javascript')
+        $(function() {
+          if (typeof Documents !== 'undefined')
+            Documents.reset(!{JSON.stringify(documents)});
+        });
