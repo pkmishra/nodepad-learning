@@ -211,7 +211,7 @@ require('./routes/document')(app, loadUser);
 require('./routes/user')(app, loadUser);
 require('./routes/session')(app, loadUser);
 require('./routes/index')(app, loadUser);
-require('./routes/test')(app, loadUser);
+require('./routes/socketio')(app, loadUser);
 
 
 

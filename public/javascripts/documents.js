@@ -305,4 +305,15 @@
         .submit();
     }
   });
+  $.fx.speeds._default = 1000;
+  $('#chatdialog').dialog({
+	 autoOpen: false,
+	 show: "blind",
+	 hide: "explode"
+  }); 
+  $('#chatlink').click(function() {
+  	$('#chatdialog').dialog({open:true}); 
+    return false; 	
+  });
+  
 })();

@@ -1,0 +1,25 @@
+!!! 5
+html(lang="en")
+    head
+        title Nodejs tutorial by gridshore
+        link(href="/stylesheets/style.css", media="screen", rel="stylesheet", type="text/css")
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+        script(src='/socket.io/socket.io.js')
+    body
+        div#header
+            div#login
+                - if (typeof currentUser !== 'undefined')
+                    span
+                        a(href="/authenticate") Login using twitter
+                - else
+                    span #{loginName}
+            div
+                h1 Sample Chat App
+                
+            ul
+                li
+                    a(href="/") Home
+                li
+                    a(href="/chat") Chat
+        div#message
+        div#body!= body

@@ -4,6 +4,7 @@ html
     title= 'Nodepad'
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/aristo/aristo.css')
+    link(rel='stylesheet', href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css')
     script(type='text/javascript', src='/javascripts/json.js')
     script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js')
     script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
@@ -22,6 +23,8 @@ html
             li.right
               form.search(action='/search')
                 input(name='s', value='Search')
+            li.right
+              a#chatlink(href='/chat') Chat
       !{flashMessages}
       != body
     script(type='text/javascript', src='/javascripts/flash.js')
@@ -33,3 +36,6 @@ html
           if (typeof Documents !== 'undefined')
             Documents.reset(!{JSON.stringify(documents)});
         });
+     #chatdialog
+        p this is basic dialog to be shown
+  

@@ -263,3 +263,25 @@ form.search {
 #show-all {
   color: #999;
 }
+#chatlink {
+  margin-right: 10px;
+}
+#chatdialog {
+  display: none;
+}
+#message {
+  width: 250px;
+  float: right;
+}
+#message div {
+  border: 1px solid #111;
+  margin: 2px;
+}
+#chat {
+  position: absolute;
+  top: 180px;
+  left: 310px;
+}
+#chat div {
+  border-bottom: 1px solid #111;
+}
