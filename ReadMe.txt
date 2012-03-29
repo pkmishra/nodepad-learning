@@ -1,0 +1,3 @@
+This is my endeavor to learn node.js.I have followed the tutorial presented on dailyjs (http://dailyjs.com/2010/11/01/node-tutorial/)
+but source code(https://github.com/alexyoung/nodepad) is a little bit outdated therefore I myself corrected the code wherever possible and checked in all the code so that
+others may use it. 
